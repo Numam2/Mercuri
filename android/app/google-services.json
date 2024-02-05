@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "878461692365",
+    "project_id": "mercuri-pocketfinance",
+    "storage_bucket": "mercuri-pocketfinance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878461692365:android:d66886ff75a3805accfc84",
+        "android_client_info": {
+          "package_name": "com.example.mercuri"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6YdsmXp2zafVkNmKVJXnBl8tuMjzFyU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
