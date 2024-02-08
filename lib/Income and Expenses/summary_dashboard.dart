@@ -3,6 +3,7 @@ import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/Income%20and%20Expenses/monthly_expense_summary.dart';
 import 'package:mercuri/Income%20and%20Expenses/monthly_income_summary.dart';
 import 'package:mercuri/Models/stats.dart';
+import 'package:mercuri/change_date_options.dart';
 import 'package:mercuri/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,8 @@ class SummaryDashboard extends StatefulWidget {
 }
 
 class _SummaryDashboardState extends State<SummaryDashboard> {
+  late DateTime selectedDate;
+
   final controller = PageController(initialPage: 0);
   bool seeExpenses = true;
 
@@ -36,23 +39,23 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
   String currentMonth = '';
   int currentYear = 0;
 
-  final List<Map> incomeList = [
-    {
-      'Category': 'Salary',
-      'Amount': 20000,
-      'Date': DateTime(2024, 1, 2),
-    },
-    {
-      'Category': 'Investments',
-      'Amount': 5063.5,
-      'Date': DateTime(2024, 1, 15),
-    },
-  ];
+  void changeDate(int year, int month) {
+    setState(() {
+      selectedDate = DateTime(
+        year,
+        month,
+      );
+      currentMonth = months[selectedDate.month - 1];
+      currentYear = selectedDate.year;
+    });
+    Navigator.of(context).pop();
+  }
 
   @override
   void initState() {
-    currentMonth = months[DateTime.now().month - 1];
-    currentYear = DateTime.now().year;
+    selectedDate = DateTime.now();
+    currentMonth = months[selectedDate.month - 1];
+    currentYear = selectedDate.year;
     super.initState();
   }
 
@@ -79,7 +82,18 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return ChangeDateOptions(changeDate, selectedDate);
+                      });
+                },
                 child: Text(
                   '$currentMonth $currentYear',
                   style: TextStyle(
@@ -195,7 +209,7 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
             //PageView
             StreamProvider<Stats>.value(
               value: DatabaseService()
-                  .monthlyStatsfromSnapshot(widget.uid, DateTime.now()),
+                  .monthlyStatsfromSnapshot(widget.uid, selectedDate),
               initialData: Stats(
                   monthlyIncome: 0,
                   monthlyExpenses: 0,

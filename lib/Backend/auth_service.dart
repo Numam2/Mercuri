@@ -46,10 +46,12 @@ class AuthService {
   }
 
   //Register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(
+      String email, String password, String name) async {
     try {
       await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => value.user!.updateDisplayName(name));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('La contraseña es muy débil');

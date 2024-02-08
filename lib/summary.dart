@@ -5,6 +5,7 @@ import 'package:mercuri/Income%20and%20Expenses/summary_dashboard.dart';
 import 'package:mercuri/Income/income_summary.dart';
 import 'package:mercuri/Models/stats.dart';
 import 'package:mercuri/Models/transactions.dart';
+import 'package:mercuri/change_date_options.dart';
 import 'package:mercuri/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,8 @@ class Summary extends StatefulWidget {
 }
 
 class _SummaryState extends State<Summary> {
+  DateTime selectedDate = DateTime.now();
+
   final List<String> months = [
     'January',
     'February',
@@ -34,10 +37,22 @@ class _SummaryState extends State<Summary> {
   String currentMonth = '';
   int currentYear = 0;
 
+  void changeDate(int year, int month) {
+    setState(() {
+      selectedDate = DateTime(
+        year,
+        month,
+      );
+      currentMonth = months[selectedDate.month - 1];
+      currentYear = selectedDate.year;
+    });
+    Navigator.of(context).pop();
+  }
+
   @override
   void initState() {
-    currentMonth = months[DateTime.now().month - 1];
-    currentYear = DateTime.now().year;
+    currentMonth = months[selectedDate.month - 1];
+    currentYear = selectedDate.year;
     super.initState();
   }
 
@@ -57,7 +72,18 @@ class _SummaryState extends State<Summary> {
                   fontWeight: FontWeight.normal),
             ),
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return ChangeDateOptions(changeDate, selectedDate);
+                      });
+                },
                 splashRadius: 18,
                 icon: const Icon(
                   Icons.arrow_drop_down_sharp,
@@ -83,12 +109,12 @@ class _SummaryState extends State<Summary> {
         //Income
         MultiProvider(providers: [
           StreamProvider<List<Transactions>>.value(
-              value: DatabaseService()
-                  .shortIncomeList(widget.uid, DateTime.now().year.toString()),
+              value:
+                  DatabaseService().shortIncomeList(widget.uid, selectedDate),
               initialData: const []),
           StreamProvider<Stats>.value(
               value: DatabaseService()
-                  .monthlyStatsfromSnapshot(widget.uid, DateTime.now()),
+                  .monthlyStatsfromSnapshot(widget.uid, selectedDate),
               initialData: Stats(
                   monthlyIncome: 0,
                   monthlyExpenses: 0,
@@ -99,12 +125,12 @@ class _SummaryState extends State<Summary> {
         //Expenses
         MultiProvider(providers: [
           StreamProvider<List<Transactions>>.value(
-              value: DatabaseService()
-                  .shortExpenseList(widget.uid, DateTime.now().year.toString()),
+              value:
+                  DatabaseService().shortExpenseList(widget.uid, selectedDate),
               initialData: const []),
           StreamProvider<Stats>.value(
               value: DatabaseService()
-                  .monthlyStatsfromSnapshot(widget.uid, DateTime.now()),
+                  .monthlyStatsfromSnapshot(widget.uid, selectedDate),
               initialData: Stats(
                   monthlyIncome: 0,
                   monthlyExpenses: 0,

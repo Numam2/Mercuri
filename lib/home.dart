@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mercuri/Backend/auth_service.dart';
 import 'package:mercuri/Income%20and%20Expenses/create_transaction.dart';
@@ -30,7 +31,7 @@ class Home extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
           backgroundColor: theme.isDarkMode ? Colors.black54 : Colors.white),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,7 +224,7 @@ class Home extends StatelessWidget {
               children: [
                 //Hi
                 Text(
-                  'Hi Numa',
+                  'Hi ${FirebaseAuth.instance.currentUser!.displayName}',
                   style: TextStyle(
                       color: theme.isDarkMode ? Colors.white : Colors.black,
                       fontSize: 35,

@@ -45,12 +45,15 @@ class DatabaseService {
   }
 
   //Short list of Income
-  Stream<List<Transactions>> shortIncomeList(uid, year) async* {
+  Stream<List<Transactions>> shortIncomeList(uid, DateTime date) async* {
     yield* FirebaseFirestore.instance
         .collection('Transactions')
         .doc(uid)
-        .collection(year)
+        .collection(date.year.toString())
         .where('Type', isEqualTo: 'Income')
+        .where('Date',
+            isGreaterThan: DateTime(date.year, date.month, 1, 0, 0, 0))
+        .where('Date', isLessThan: DateTime(date.year, date.month + 1, 0))
         .orderBy('Date', descending: true)
         .limit(3)
         .snapshots()
@@ -58,12 +61,15 @@ class DatabaseService {
   }
 
   //Short list of Income
-  Stream<List<Transactions>> shortExpenseList(uid, year) async* {
+  Stream<List<Transactions>> shortExpenseList(uid, DateTime date) async* {
     yield* FirebaseFirestore.instance
         .collection('Transactions')
         .doc(uid)
-        .collection(year)
+        .collection(date.year.toString())
         .where('Type', isEqualTo: 'Expense')
+        .where('Date',
+            isGreaterThan: DateTime(date.year, date.month, 1, 0, 0, 0))
+        .where('Date', isLessThan: DateTime(date.year, date.month + 1, 0))
         .orderBy('Date', descending: true)
         .limit(3)
         .snapshots()

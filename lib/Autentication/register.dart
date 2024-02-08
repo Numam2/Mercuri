@@ -16,6 +16,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
+  final FocusNode _nameNode = FocusNode();
   final FocusNode _emailNode = FocusNode();
   final FocusNode _passwordNode = FocusNode();
   final FocusNode _repeatPasswordNode = FocusNode();
@@ -24,6 +25,7 @@ class _RegisterState extends State<Register> {
   String email = "";
   String password = "";
   String repeatPassword = "";
+  String name = '';
   String error = "";
   bool loading = false;
 
@@ -58,7 +60,37 @@ class _RegisterState extends State<Register> {
           // Image(
           //     image: AssetImage('images/Denario Logo.png'), height: 175)),
 
+          //Name
+          TextFormField(
+            keyboardType: TextInputType.name,
+            style: TextStyle(color: fontColor, fontSize: 14),
+            validator: (val) =>
+                (val == null || val == '') ? "Add a name" : null,
+            cursorColor: Colors.grey,
+            focusNode: _nameNode,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              label: const Text('name'),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12),
+              prefixIcon: const Icon(
+                Icons.person_outline,
+                color: Colors.grey,
+              ),
+              errorStyle: TextStyle(
+                  color: theme.isDarkMode ? Colors.grey : Colors.redAccent[700],
+                  fontSize: 12),
+            ),
+            onFieldSubmitted: (term) {
+              _nameNode.unfocus();
+              FocusScope.of(context).requestFocus(_emailNode);
+            },
+            onChanged: (val) {
+              setState(() => name = val);
+            },
+          ),
+
           ///Email input
+          const SizedBox(height: 25),
           TextFormField(
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(color: fontColor, fontSize: 14),
@@ -71,7 +103,7 @@ class _RegisterState extends State<Register> {
               label: const Text('email'),
               labelStyle: const TextStyle(color: Colors.grey, fontSize: 12),
               prefixIcon: const Icon(
-                Icons.person_outline,
+                Icons.mail_outline,
                 color: Colors.grey,
               ),
               errorStyle: TextStyle(
@@ -178,7 +210,8 @@ class _RegisterState extends State<Register> {
                 setState(() => loading = true);
 
                 try {
-                  AuthService().registerWithEmailAndPassword(email, password);
+                  AuthService()
+                      .registerWithEmailAndPassword(email, password, name);
                 } on FirebaseAuthException catch (e) {
                   setState(() {
                     error = 'Oops.. Algo salió mal. $e';
@@ -220,7 +253,8 @@ class _RegisterState extends State<Register> {
                 setState(() => loading = true);
 
                 try {
-                  AuthService().registerWithEmailAndPassword(email, password);
+                  AuthService()
+                      .registerWithEmailAndPassword(email, password, name);
                 } on FirebaseAuthException catch (e) {
                   setState(() {
                     error = 'Oops.. Algo salió mal. $e';

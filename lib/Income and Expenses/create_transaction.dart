@@ -23,7 +23,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
 
   List<Map> expenseCategories = [
     {
-      'Name': 'Food',
+      'Name': 'Groceries',
       'Icon': Icons.local_grocery_store_outlined,
     },
     {
@@ -39,13 +39,15 @@ class _CreateTransactionState extends State<CreateTransaction> {
       'Icon': Icons.school_outlined,
     },
     {
-      'Name': 'Wellness',
+      'Name': 'Health & Wellness',
       'Icon': Icons.fitness_center,
     },
     {
       'Name': 'Eat out',
       'Icon': Icons.fastfood_outlined,
     },
+    {'Name': 'Transportation', 'Icon': Icons.emoji_transportation_outlined},
+    {'Name': 'Shopping', 'Icon': Icons.shopping_bag_outlined},
     {
       'Name': 'Others',
       'Icon': Icons.account_balance_wallet,
@@ -325,7 +327,9 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                             DateTime.now(),
                                             widget.transactionType,
                                             selectedCategory['Name'],
-                                            amount)).then((value) => Navigator.of(context).pop());
+                                            amount))
+                                    .then(
+                                        (value) => Navigator.of(context).pop());
                               },
                               child: const Text(
                                 'SAVE',

@@ -1,4 +1,4 @@
-package com.example.mercuri
+package com.mdo.mercuri
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/Income%20and%20Expenses/transactions_list_view.dart';
 import 'package:mercuri/Models/transactions.dart';
+import 'package:mercuri/change_date_options.dart';
 import 'package:mercuri/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -28,21 +28,6 @@ class TransactionList extends StatefulWidget {
 class _TransactionListState extends State<TransactionList> {
   //Date
   DateTime selectedDate = DateTime.now();
-  List months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-  List years = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
   //Transaction type
   List<String> transactionTypeList = [
@@ -55,6 +40,16 @@ class _TransactionListState extends State<TransactionList> {
 
   //Category
   String selectedCategory = '';
+
+  void changeDate(int year, int month) {
+    setState(() {
+      selectedDate = DateTime(
+        year,
+        month,
+      );
+    });
+    Navigator.of(context).pop();
+  }
 
   @override
   void initState() {
@@ -123,8 +118,6 @@ class _TransactionListState extends State<TransactionList> {
                                 MaterialStateProperty.all<Color>(buttonColor),
                           ),
                           onPressed: () {
-                            var changeMonth = selectedDate.month - 1;
-                            var changeYear = selectedDate.year;
                             showModalBottomSheet(
                                 shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
@@ -133,185 +126,8 @@ class _TransactionListState extends State<TransactionList> {
                                 isScrollControlled: true,
                                 context: context,
                                 builder: (context) {
-                                  return SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.4,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        //Title
-                                        const Padding(
-                                          padding: EdgeInsets.all(20.0),
-                                          child: Text(
-                                            "Select date",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const Divider(
-                                          color: Colors.grey,
-                                          indent: 20,
-                                          endIndent: 20,
-                                          thickness: 0.5,
-                                        ),
-                                        const SizedBox(height: 15),
-                                        //Selected date
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            //Month
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                //Text
-                                                const Text(
-                                                  "Month",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 12.0,
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                ),
-                                                //Selected
-                                                SizedBox(
-                                                  height: 90,
-                                                  width: 175,
-                                                  child: Center(
-                                                    child:
-                                                        CupertinoPicker.builder(
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            itemExtent: 75,
-                                                            childCount:
-                                                                months.length,
-                                                            onSelectedItemChanged:
-                                                                (i) {
-                                                              changeMonth =
-                                                                  i + 1;
-                                                            },
-                                                            itemBuilder:
-                                                                ((context,
-                                                                    index) {
-                                                              return Center(
-                                                                child: Text(
-                                                                    months[
-                                                                        index]),
-                                                              );
-                                                            })),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(width: 15),
-                                            //Year
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                //Text
-                                                const Text(
-                                                  "Year",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 12.0,
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                ),
-                                                //Selected
-                                                SizedBox(
-                                                  height: 90,
-                                                  width: 100,
-                                                  child: Center(
-                                                    child:
-                                                        CupertinoPicker.builder(
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            itemExtent: 75,
-                                                            childCount:
-                                                                years.length,
-                                                            onSelectedItemChanged:
-                                                                (i) {
-                                                              changeYear =
-                                                                  years[i];
-                                                            },
-                                                            itemBuilder:
-                                                                ((context,
-                                                                    index) {
-                                                              return Center(
-                                                                child: Text(
-                                                                    '${years[index]}'),
-                                                              );
-                                                            })),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        const Spacer(),
-                                        //Button
-                                        Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: SizedBox(
-                                                width: double.infinity,
-                                                height: 50,
-                                                child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        18.0)),
-                                                    backgroundColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                  ),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      selectedDate = DateTime(
-                                                        changeYear,
-                                                        changeMonth,
-                                                      );
-                                                    });
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text(
-                                                    'Save',
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              )),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                  return ChangeDateOptions(
+                                      changeDate, selectedDate);
                                 });
                           },
                           child: Row(

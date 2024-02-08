@@ -16,9 +16,7 @@ class MonthlyExpenseSummary extends StatelessWidget {
     final theme = Provider.of<ThemeProvider>(context);
 
     if (stats.monthlyExpenses! <= 0) {
-      return const SizedBox(
-        child: Text('Mo'),
-      );
+      return const SizedBox();
     }
 
     var keys = stats.expensesByCategory!.keys.toList();
