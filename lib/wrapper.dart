@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mercuri/Autentication/authenticate.dart';
+import 'package:mercuri/Backend/database_service.dart';
+import 'package:mercuri/Models/user.dart';
 import 'package:mercuri/home.dart';
 import 'package:mercuri/loading.dart';
+import 'package:provider/provider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -50,7 +53,12 @@ class _WrapperState extends State<Wrapper> {
           return const Authenticate(); // User is not logged in
         }
 
-        return Home(currentUser.uid);
+        return MultiProvider(providers: [
+          StreamProvider<UserData?>.value(
+            value: DatabaseService().userData(currentUser.uid),
+            initialData: null,
+          ),
+        ], child: Home(currentUser.uid));
 
         // if (currentUser.displayName == null || currentUser.displayName == '') {
         //   return StreamProvider<UserData?>.value(

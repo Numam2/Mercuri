@@ -3,14 +3,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mercuri/Models/stats.dart';
 import 'package:mercuri/Models/transactions.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 import '../Income and Expenses/transactions_list.dart';
 
 class ExpensesSummary extends StatelessWidget {
   final String uid;
-  ExpensesSummary(this.uid, {super.key});
+  final DateTime? selectedDate;
+  final List<dynamic> incomeCategories;
+  final List<dynamic> expenseCategories;
+  final List<dynamic> paymentMethods;
+  ExpensesSummary(this.uid, this.selectedDate, this.incomeCategories,
+      this.expenseCategories, this.paymentMethods,
+      {super.key});
 
   final formatCurrency = NumberFormat.simpleCurrency();
 
@@ -67,7 +73,7 @@ class ExpensesSummary extends StatelessWidget {
           children: [
             //Text
             Text(
-              'Expenses',
+              'Gastos',
               style: TextStyle(
                   color: theme.isDarkMode ? Colors.white : Colors.black,
                   fontSize: 14,
@@ -104,7 +110,7 @@ class ExpensesSummary extends StatelessWidget {
                             children: [
                               //Desc
                               Text(
-                                transactions[i].category!,
+                                transactions[i].description!,
                                 style: TextStyle(
                                     color: theme.isDarkMode
                                         ? Colors.white
@@ -113,7 +119,7 @@ class ExpensesSummary extends StatelessWidget {
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 2,
                               ),
                               //Date
                               Text(
@@ -156,11 +162,18 @@ class ExpensesSummary extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return TransactionList(
                       uid: uid,
+                      filtered: true,
+                      selectedDate: selectedDate,
+                      transactionType: 'Gasto',
+                      selectedCategory: '',
+                      incomeCategories: incomeCategories,
+                      expenseCategories: expenseCategories,
+                      paymentMethods: paymentMethods,
                     );
                   }));
                 },
                 child: Text(
-                  'See all',
+                  'Ver más',
                   style: TextStyle(
                       color: theme.isDarkMode ? Colors.white : Colors.black,
                       fontSize: 14,

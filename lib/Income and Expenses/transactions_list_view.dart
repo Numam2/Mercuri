@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mercuri/Models/transactions.dart';
+import 'package:mercuri/Settings/payments_map.dart';
 import 'package:provider/provider.dart';
 
 class TransactionsListView extends StatelessWidget {
   final String transactionType;
   final Color textColor;
-  TransactionsListView(this.transactionType, this.textColor, {super.key});
+  final String selectedCategory;
+  final String selectedPaymentMethod;
+  TransactionsListView(this.transactionType, this.textColor,
+      this.selectedCategory, this.selectedPaymentMethod,
+      {super.key});
 
   final formatCurrency = NumberFormat.simpleCurrency();
 
@@ -21,15 +26,40 @@ class TransactionsListView extends StatelessWidget {
 
     List<Transactions> transactionList = [];
 
-    if (transactionType == 'Income and expenses') {
+    //Transaction Type filter
+    if (transactionType == 'Ingresos y gastos') {
       transactionList = List.from(transactions);
     } else {
       transactionList = List.from(transactions
           .where((element) => element.transactionType == transactionType));
     }
 
+    //category
+    if (selectedCategory != '') {
+      transactionList = transactionList
+          .where((element) => element.category == selectedCategory)
+          .toList();
+    }
+
+    //paymentMethod
+    if (selectedPaymentMethod != '') {
+      transactionList = transactionList
+          .where((element) =>
+              element.paymentMethod!['Name'] == selectedPaymentMethod)
+          .toList();
+    }
+
     return SliverList(
         delegate: SliverChildBuilderDelegate((context, i) {
+      int? iconIndex;
+      if (transactionList[i].paymentMethod != null &&
+          transactionList[i].paymentMethod!.isNotEmpty) {
+        iconIndex = PaymentsMap().paymentsMap.indexWhere((item) =>
+            item['Code'] == transactionList[i].paymentMethod!['Icon']);
+      } else {
+        iconIndex = null;
+      }
+
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(5),
@@ -42,9 +72,12 @@ class TransactionsListView extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Icon(
-                (transactionList[i].transactionType == 'Income')
-                    ? Icons.arrow_upward
-                    : Icons.arrow_downward,
+                (transactionList[i].paymentMethod != null &&
+                        transactionList[i].paymentMethod!.isNotEmpty)
+                    ? PaymentsMap().paymentsMap[iconIndex!]['Icon']
+                    : (transactionList[i].transactionType == 'Ingresos')
+                        ? Icons.arrow_upward
+                        : Icons.arrow_downward,
                 color: textColor,
                 size: 16,
               ),
@@ -90,16 +123,17 @@ class TransactionsListView extends StatelessWidget {
                 ],
               ),
             ),
+
             //Total
             Expanded(
               flex: 3,
               child: Text(
-                (transactionList[i].transactionType == 'Income')
+                (transactionList[i].transactionType == 'Ingresos')
                     ? '+${formatCurrency.format(transactionList[i].amount)}'
                     : '-${formatCurrency.format(transactionList[i].amount)}',
                 style: GoogleFonts.eczar(
                     fontWeight: FontWeight.normal,
-                    color: (transactionList[i].transactionType == 'Income')
+                    color: (transactionList[i].transactionType == 'Ingresos')
                         ? textColor
                         : Colors.red[900],
                     fontSize: 18),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mercuri/Loading.dart';
 import 'package:mercuri/Wrapper.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
@@ -181,19 +181,19 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 50),
                 ElevatedButton(
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     )),
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
-                    overlayColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.hovered)) {
+                        WidgetStateProperty.all<Color>(Colors.black),
+                    overlayColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.hovered)) {
                           return Colors.grey.shade800;
                         }
-                        if (states.contains(MaterialState.focused) ||
-                            states.contains(MaterialState.pressed)) {
+                        if (states.contains(WidgetState.focused) ||
+                            states.contains(WidgetState.pressed)) {
                           return Colors.grey.shade500;
                         }
                         return Colors
@@ -202,7 +202,6 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   onPressed: () async {
-                    print(FirebaseAuth.instance.currentUser);
                     if (_formKey.currentState!.validate()) {
                       //Loading
                       setState(() => loading = true);

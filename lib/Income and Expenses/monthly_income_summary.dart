@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mercuri/Models/stats.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class MonthlyIncomeSummary extends StatelessWidget {
@@ -99,7 +99,7 @@ class MonthlyIncomeSummary extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Total earned:",
+              "Total de ingresos:",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: (theme.isDarkMode) ? Colors.white : Colors.black,

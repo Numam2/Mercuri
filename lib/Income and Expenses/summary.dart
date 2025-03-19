@@ -5,13 +5,19 @@ import 'package:mercuri/Income%20and%20Expenses/summary_dashboard.dart';
 import 'package:mercuri/Income/income_summary.dart';
 import 'package:mercuri/Models/stats.dart';
 import 'package:mercuri/Models/transactions.dart';
-import 'package:mercuri/change_date_options.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/Income%20and%20Expenses/change_date_options.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class Summary extends StatefulWidget {
   final String uid;
-  const Summary(this.uid, {super.key});
+  final List<dynamic> incomeCategories;
+  final List<dynamic> expenseCategories;
+  final List<dynamic> paymentMethod;
+
+  const Summary(this.uid, this.incomeCategories, this.expenseCategories,
+      this.paymentMethod,
+      {super.key});
 
   @override
   State<Summary> createState() => _SummaryState();
@@ -21,18 +27,18 @@ class _SummaryState extends State<Summary> {
   DateTime selectedDate = DateTime.now();
 
   final List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'Octobrer',
-    'November',
-    'December'
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
   ];
   String currentMonth = '';
   int currentYear = 0;
@@ -95,10 +101,11 @@ class _SummaryState extends State<Summary> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SummaryDashboard(widget.uid)));
+                          builder: (context) =>
+                              SummaryDashboard(widget.uid, selectedDate)));
                 },
                 child: Text(
-                  'View summary',
+                  'Ver resumen',
                   style: TextStyle(
                       color: theme.isDarkMode ? Colors.white : Colors.black,
                       fontSize: 12),
@@ -107,36 +114,50 @@ class _SummaryState extends State<Summary> {
         ),
         const SizedBox(height: 18),
         //Income
-        MultiProvider(providers: [
-          StreamProvider<List<Transactions>>.value(
-              value:
-                  DatabaseService().shortIncomeList(widget.uid, selectedDate),
-              initialData: const []),
-          StreamProvider<Stats>.value(
-              value: DatabaseService()
-                  .monthlyStatsfromSnapshot(widget.uid, selectedDate),
-              initialData: Stats(
-                  monthlyIncome: 0,
-                  monthlyExpenses: 0,
-                  expensesByCategory: {},
-                  incomeByCategory: {})),
-        ], child: IncomeSummary(widget.uid)),
+        MultiProvider(
+            providers: [
+              StreamProvider<List<Transactions>>.value(
+                  value: DatabaseService()
+                      .shortIncomeList(widget.uid, selectedDate),
+                  initialData: const []),
+              StreamProvider<Stats>.value(
+                  value: DatabaseService()
+                      .monthlyStatsfromSnapshot(widget.uid, selectedDate),
+                  initialData: Stats(
+                      monthlyIncome: 0,
+                      monthlyExpenses: 0,
+                      expensesByCategory: {},
+                      incomeByCategory: {})),
+            ],
+            child: IncomeSummary(
+                widget.uid,
+                selectedDate,
+                widget.incomeCategories,
+                widget.expenseCategories,
+                widget.paymentMethod)),
         const SizedBox(height: 20),
         //Expenses
-        MultiProvider(providers: [
-          StreamProvider<List<Transactions>>.value(
-              value:
-                  DatabaseService().shortExpenseList(widget.uid, selectedDate),
-              initialData: const []),
-          StreamProvider<Stats>.value(
-              value: DatabaseService()
-                  .monthlyStatsfromSnapshot(widget.uid, selectedDate),
-              initialData: Stats(
-                  monthlyIncome: 0,
-                  monthlyExpenses: 0,
-                  expensesByCategory: {},
-                  incomeByCategory: {})),
-        ], child: ExpensesSummary(widget.uid)),
+        MultiProvider(
+            providers: [
+              StreamProvider<List<Transactions>>.value(
+                  value: DatabaseService()
+                      .shortExpenseList(widget.uid, selectedDate),
+                  initialData: const []),
+              StreamProvider<Stats>.value(
+                  value: DatabaseService()
+                      .monthlyStatsfromSnapshot(widget.uid, selectedDate),
+                  initialData: Stats(
+                      monthlyIncome: 0,
+                      monthlyExpenses: 0,
+                      expensesByCategory: {},
+                      incomeByCategory: {})),
+            ],
+            child: ExpensesSummary(
+                widget.uid,
+                selectedDate,
+                widget.incomeCategories,
+                widget.expenseCategories,
+                widget.paymentMethod)),
       ],
     );
   }

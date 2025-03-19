@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/Models/user.dart';
 
 class AuthService {
@@ -28,11 +29,8 @@ class AuthService {
   //Sign in with email and password
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      User? user = (await FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: email, password: password))
-          .user;
-
-      print('User is ${user?.uid}');
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -48,10 +46,29 @@ class AuthService {
   //Register with email and password
   Future registerWithEmailAndPassword(
       String email, String password, String name) async {
+    //Search Name
+    List<String> caseNameSearchList = [];
+    String temp = "";
+    for (int i = 0; i < name.length; i++) {
+      temp = temp + name[i];
+      caseNameSearchList.add(temp);
+    }
+    //Search email
+    List<String> caseemailSearchList = [];
+    String temp2 = "";
+    for (int i = 0; i < email.length; i++) {
+      temp2 = temp2 + email[i];
+      caseemailSearchList.add(temp2);
+    }
+
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => value.user!.updateDisplayName(name));
+          .then((value) async {
+        await value.user!.updateDisplayName(name);
+        await DatabaseService().createUser(value.user!.uid, name, email,
+            caseNameSearchList, caseemailSearchList);
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('La contraseña es muy débil');

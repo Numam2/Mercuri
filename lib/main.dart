@@ -2,13 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mercuri/Wrapper.dart';
-import 'package:mercuri/firebase_options.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/In%20App%20Purchases/firebase_options.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -36,8 +37,7 @@ class MyApp extends StatelessWidget {
                   seedColor: const Color(0xff1EB980),
                 ),
                 textTheme: GoogleFonts.robotoCondensedTextTheme(
-                    Theme.of(context).textTheme),
-                useMaterial3: true),
+                    Theme.of(context).textTheme)),
             themeMode:
                 themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             debugShowCheckedModeBanner: false,

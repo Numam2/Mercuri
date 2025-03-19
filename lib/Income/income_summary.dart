@@ -4,12 +4,18 @@ import 'package:intl/intl.dart';
 import 'package:mercuri/Income%20and%20Expenses/transactions_list.dart';
 import 'package:mercuri/Models/stats.dart';
 import 'package:mercuri/Models/transactions.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class IncomeSummary extends StatelessWidget {
   final String uid;
-  IncomeSummary(this.uid, {super.key});
+  final DateTime? selectedDate;
+  final List<dynamic> incomeCategories;
+  final List<dynamic> expenseCategories;
+  final List<dynamic> paymentMethods;
+  IncomeSummary(this.uid, this.selectedDate, this.incomeCategories,
+      this.expenseCategories, this.paymentMethods,
+      {super.key});
 
   final formatCurrency = NumberFormat.simpleCurrency();
   @override
@@ -38,7 +44,7 @@ class IncomeSummary extends StatelessWidget {
           children: [
             //Text
             Text(
-              'Income',
+              'Ingresos',
               style: TextStyle(
                   color: theme.isDarkMode ? Colors.white : Colors.black,
                   fontSize: 14,
@@ -75,7 +81,7 @@ class IncomeSummary extends StatelessWidget {
                             children: [
                               //Desc
                               Text(
-                                transactions[i].category!,
+                                transactions[i].description!,
                                 style: TextStyle(
                                     color: theme.isDarkMode
                                         ? Colors.white
@@ -125,11 +131,20 @@ class IncomeSummary extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return TransactionList(uid: uid);
+                    return TransactionList(
+                      uid: uid,
+                      filtered: true,
+                      selectedDate: selectedDate,
+                      transactionType: 'Ingreso',
+                      selectedCategory: '',
+                      incomeCategories: incomeCategories,
+                      expenseCategories: expenseCategories,
+                      paymentMethods: paymentMethods,
+                    );
                   }));
                 },
                 child: Text(
-                  'See all',
+                  'Ver más',
                   style: TextStyle(
                       color: theme.isDarkMode ? Colors.white : Colors.black,
                       fontSize: 14,

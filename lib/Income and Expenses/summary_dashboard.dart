@@ -3,13 +3,14 @@ import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/Income%20and%20Expenses/monthly_expense_summary.dart';
 import 'package:mercuri/Income%20and%20Expenses/monthly_income_summary.dart';
 import 'package:mercuri/Models/stats.dart';
-import 'package:mercuri/change_date_options.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/Income%20and%20Expenses/change_date_options.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class SummaryDashboard extends StatefulWidget {
   final String uid;
-  const SummaryDashboard(this.uid, {super.key});
+  final DateTime? selectedDate;
+  const SummaryDashboard(this.uid, this.selectedDate, {super.key});
 
   @override
   State<SummaryDashboard> createState() => _SummaryDashboardState();
@@ -22,18 +23,18 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
   bool seeExpenses = true;
 
   final List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'Octobrer',
-    'November',
-    'December'
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
   ];
 
   String currentMonth = '';
@@ -53,9 +54,16 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
 
   @override
   void initState() {
-    selectedDate = DateTime.now();
-    currentMonth = months[selectedDate.month - 1];
-    currentYear = selectedDate.year;
+    if (widget.selectedDate != null) {
+      selectedDate = widget.selectedDate!;
+      currentMonth = months[widget.selectedDate!.month - 1];
+      currentYear = widget.selectedDate!.year;
+    } else {
+      selectedDate = DateTime.now();
+      currentMonth = months[selectedDate.month - 1];
+      currentYear = selectedDate.year;
+    }
+
     super.initState();
   }
 
@@ -74,7 +82,7 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
                   size: 16,
                   color: theme.isDarkMode ? Colors.white : Colors.black)),
           title: Text(
-            'My summary',
+            'Mi resumen',
             style: TextStyle(
                 color: textColor, fontSize: 18, fontWeight: FontWeight.bold),
           ),
@@ -121,7 +129,7 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
                                 width: !seeExpenses ? 0 : 3,
                                 color: !seeExpenses
                                     ? textColor
-                                    : Colors.greenAccent))),
+                                    : Theme.of(context).colorScheme.primary))),
                     child: TextButton(
                         onPressed: () {
                           setState(() {
@@ -132,10 +140,9 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
                               curve: Curves.ease);
                         },
                         style: ButtonStyle(
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.hovered)) {
+                          overlayColor: WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.hovered)) {
                                 return Colors.grey.withOpacity(
                                     0.2); // Customize the hover color here
                               }
@@ -147,13 +154,13 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
                         child: Padding(
                           padding: const EdgeInsets.all(5),
                           child: Text(
-                            'Expenses',
+                            'Gastos',
                             style: TextStyle(
                                 fontWeight: (seeExpenses)
                                     ? FontWeight.bold
                                     : FontWeight.normal,
                                 color: (seeExpenses)
-                                    ? Colors.greenAccent
+                                    ? Theme.of(context).colorScheme.primary
                                     : textColor),
                           ),
                         )),
@@ -165,7 +172,7 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
                             bottom: BorderSide(
                                 width: !seeExpenses ? 3 : 0,
                                 color: !seeExpenses
-                                    ? Colors.greenAccent
+                                    ? Theme.of(context).colorScheme.primary
                                     : textColor))),
                     child: TextButton(
                         onPressed: () {
@@ -178,10 +185,9 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
                               curve: Curves.ease);
                         },
                         style: ButtonStyle(
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.hovered)) {
+                          overlayColor: WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.hovered)) {
                                 return Colors.grey.withOpacity(
                                     0.2); // Customize the hover color here
                               }
@@ -193,13 +199,13 @@ class _SummaryDashboardState extends State<SummaryDashboard> {
                         child: Padding(
                           padding: const EdgeInsets.all(5),
                           child: Text(
-                            'Income',
+                            'Ingresos',
                             style: TextStyle(
                                 fontWeight: (!seeExpenses)
                                     ? FontWeight.bold
                                     : FontWeight.normal,
                                 color: (!seeExpenses)
-                                    ? Colors.greenAccent
+                                    ? Theme.of(context).colorScheme.primary
                                     : textColor),
                           ),
                         )),

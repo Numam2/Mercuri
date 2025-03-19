@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mercuri/theme.dart';
+import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
@@ -68,7 +68,7 @@ class _SettingsState extends State<Settings> {
           children: [
             //Theme Mode
             Text(
-              'Light Mode',
+              'Visualización',
               style: TextStyle(
                   color: theme.isDarkMode ? Colors.white : Colors.black),
             ),
@@ -88,7 +88,7 @@ class _SettingsState extends State<Settings> {
                       height: 10,
                     ),
                     Text(
-                      'Day',
+                      'Día',
                       style: TextStyle(
                           color:
                               theme.isDarkMode ? Colors.white : Colors.black),
@@ -109,7 +109,7 @@ class _SettingsState extends State<Settings> {
                       height: 10,
                     ),
                     Text(
-                      'Night',
+                      'Noche',
                       style: TextStyle(
                           color:
                               theme.isDarkMode ? Colors.white : Colors.black),

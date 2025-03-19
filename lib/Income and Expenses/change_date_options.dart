@@ -13,18 +13,18 @@ class ChangeDateOptions extends StatefulWidget {
 class _ChangeDateOptionsState extends State<ChangeDateOptions> {
   late DateTime selectedDate;
   List months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
   ];
   List years = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
   int changeMonth = 1;
@@ -63,7 +63,7 @@ class _ChangeDateOptionsState extends State<ChangeDateOptions> {
           const Padding(
             padding: EdgeInsets.all(20.0),
             child: Text(
-              "Select date",
+              "Selecciona la fecha",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
@@ -91,7 +91,7 @@ class _ChangeDateOptionsState extends State<ChangeDateOptions> {
                 children: [
                   //Text
                   const Text(
-                    "Month",
+                    "Mes",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey,
@@ -131,7 +131,7 @@ class _ChangeDateOptionsState extends State<ChangeDateOptions> {
                 children: [
                   //Text
                   const Text(
-                    "Year",
+                    "Año",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey,
@@ -183,7 +183,7 @@ class _ChangeDateOptionsState extends State<ChangeDateOptions> {
                       widget.changeDate(changeYear, changeMonth);
                     },
                     child: const Text(
-                      'Save',
+                      'Guardar',
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
