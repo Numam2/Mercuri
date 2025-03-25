@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/Models/recurrent_transactions.dart';
+import 'package:mercuri/Models/user.dart';
 import 'package:mercuri/Recurrent%20Transactions/pay_reccurrent_transaction.dart';
 import 'package:mercuri/Settings/icons_map.dart';
 import 'package:mercuri/Settings/theme.dart';
@@ -8,7 +10,10 @@ import 'package:provider/provider.dart';
 
 class RecurrentTransactionsSummary extends StatefulWidget {
   final String uid;
-  const RecurrentTransactionsSummary(this.uid, {super.key});
+  final String userName;
+  final List paymentTypes;
+  const RecurrentTransactionsSummary(this.uid, this.userName, this.paymentTypes,
+      {super.key});
 
   @override
   State<RecurrentTransactionsSummary> createState() =>
@@ -133,8 +138,16 @@ class _RecurrentTransactionsSummaryState
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (context) {
-                                    return PayRecurrentTransaction(
-                                        widget.uid, recurrentTransactions[i]);
+                                    return StreamProvider<UserData?>.value(
+                                      initialData: null,
+                                      value: DatabaseService()
+                                          .userData(widget.uid),
+                                      child: PayRecurrentTransaction(
+                                          widget.uid,
+                                          widget.userName,
+                                          recurrentTransactions[i],
+                                          widget.paymentTypes),
+                                    );
                                   });
                             },
                             child: const Text(

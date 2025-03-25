@@ -613,12 +613,23 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                                   true,
                                                   amount,
                                                   DateTime.now(),
-                                                  repeatMonths, {
-                                            'Category':
-                                                selectedCategory['Name'],
-                                            'Icon':
-                                                selectedCategory['Icon Code']
-                                          }).then((v) {
+                                                  repeatMonths,
+                                                  {
+                                                    'Category':
+                                                        selectedCategory[
+                                                            'Name'],
+                                                    'Icon': selectedCategory[
+                                                        'Icon Code']
+                                                  },
+                                                  (assignedSharedAccounts != '')
+                                                      ? {
+                                                          'ID':
+                                                              assignedSharedAccounts,
+                                                          'Name':
+                                                              assignedAcctName
+                                                        }
+                                                      : {})
+                                              .then((v) {
                                             Navigator.of(context).pop();
                                           });
                                         } else {

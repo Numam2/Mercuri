@@ -10,6 +10,9 @@ class RecurrentTransactions {
   final num? monthsPaid;
   final bool? active;
   final Map? category;
+  final Map? associatedSharedAcct;
+  final DateTime? lastPaid;
+  final DateTime? nextPayment;
 
   RecurrentTransactions(
       {this.id,
@@ -22,5 +25,8 @@ class RecurrentTransactions {
       this.repeatxMonths,
       this.monthsPaid,
       this.active,
-      this.category});
+      this.category,
+      this.associatedSharedAcct,
+      this.lastPaid,
+      this.nextPayment});
 }

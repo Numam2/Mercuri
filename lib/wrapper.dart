@@ -63,15 +63,15 @@ class _WrapperState extends State<Wrapper> {
         // if (currentUser.displayName == null || currentUser.displayName == '') {
         //   return StreamProvider<UserData?>.value(
         //     initialData: null,
-        //     value: DatabaseService().userProfile(currentUser.uid),
-        //     child: Onboarding(),
+        //     value: DatabaseService().userData(currentUser.uid),
+        //     child: const SubscriptionHome(),
         //   );
         // } else {
-        // return StreamProvider<UserData?>.value(
-        //   initialData: null,
-        //   value: DatabaseService().userProfile(currentUser.uid),
-        //   child: Home(),
-        // );
+        //   return StreamProvider<UserData?>.value(
+        //     initialData: null,
+        //     value: DatabaseService().userData(currentUser.uid),
+        //     child: Home(currentUser.uid),
+        //   );
         // }
       },
     );

@@ -265,11 +265,11 @@ class Home extends StatelessWidget {
                               DatabaseService().recurrentTransactionsList(uid),
                           initialData: const [],
                           child: RecurrentTransactionsPage(
-                            userData.uid!,
-                            userData.name!,
-                            userData.incomeCategories!,
-                            userData.expenseCategories!,
-                          ));
+                              userData.uid!,
+                              userData.name!,
+                              userData.incomeCategories!,
+                              userData.expenseCategories!,
+                              userData.paymentMethods!));
                     }));
                   },
                   child: Padding(
@@ -512,9 +512,11 @@ class Home extends StatelessWidget {
               ),
               //Recurrent payments
               StreamProvider<List<RecurrentTransactions>?>.value(
-                value: DatabaseService().recurrentTransactionsList(uid),
+                value:
+                    DatabaseService().upcommingRecurrentTransactionsList(uid),
                 initialData: null,
-                child: RecurrentTransactionsSummary(userData.uid!),
+                child: RecurrentTransactionsSummary(
+                    userData.uid!, userData.name!, userData.paymentMethods!),
               ),
               //List of expenses
               Padding(

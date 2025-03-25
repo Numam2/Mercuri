@@ -940,7 +940,8 @@ class DatabaseService {
       num amount,
       DateTime recurrentDate,
       num repeatMonths,
-      Map category) async {
+      Map category,
+      Map associatedSharedAcct) async {
     return await FirebaseFirestore.instance
         .collection('Transactions')
         .doc(userUID)
@@ -957,7 +958,10 @@ class DatabaseService {
       'Repeat Months': repeatMonths,
       'Months Paid': 0,
       'Active': true,
-      'Category': category
+      'Category': category,
+      'Shared Account': associatedSharedAcct,
+      'Last Paid': null,
+      'Next Payment': DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
     });
   }
 
@@ -972,6 +976,8 @@ class DatabaseService {
         .update({
       'Recurrent Amount': amount,
       'Months Paid': monthsPaid,
+      'Last Paid': DateTime.now(),
+      'Next Payment': DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
     });
   }
 
@@ -986,6 +992,8 @@ class DatabaseService {
         .update({
       'Recurrent Amount': amount,
       'Months Paid': monthsPaid,
+      'Last Paid': DateTime.now(),
+      'Next Payment': null,
       'Active': false
     });
   }
@@ -1036,6 +1044,15 @@ class DatabaseService {
               doc.data().toString().contains('Active') ? doc['Active'] : false,
           category:
               doc.data().toString().contains('Category') ? doc['Category'] : {},
+          associatedSharedAcct: doc.data().toString().contains('Shared Account')
+              ? doc['Shared Account']
+              : {},
+          lastPaid: doc.data().toString().contains('Last Paid')
+              ? doc['Last Paid'].toDate()
+              : DateTime(1999, 1, 1),
+          nextPayment: doc.data().toString().contains('Next Payment')
+              ? doc['Next Payment'].toDate()
+              : DateTime(1999, 1, 1),
         );
       }).toList();
     } catch (e) {
@@ -1051,6 +1068,20 @@ class DatabaseService {
         .doc(uid)
         .collection('Recurrent Transactions')
         .where('Active', isEqualTo: true)
+        .orderBy('Date Created', descending: true)
+        .snapshots()
+        .map(_recurrenttransactionsListFromSnapshot);
+  }
+
+  Stream<List<RecurrentTransactions>> upcommingRecurrentTransactionsList(
+    uid,
+  ) async* {
+    yield* FirebaseFirestore.instance
+        .collection('Transactions')
+        .doc(uid)
+        .collection('Recurrent Transactions')
+        .where('Active', isEqualTo: true)
+        .where('Next Payment', isLessThanOrEqualTo: DateTime.now())
         .orderBy('Date Created', descending: true)
         .snapshots()
         .map(_recurrenttransactionsListFromSnapshot);

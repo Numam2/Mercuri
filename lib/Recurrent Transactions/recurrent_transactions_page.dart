@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/Models/recurrent_transactions.dart';
+import 'package:mercuri/Models/shared_accounts.dart';
 import 'package:mercuri/Recurrent%20Transactions/add_reccurrent_transaction.dart';
 import 'package:mercuri/Recurrent%20Transactions/pay_reccurrent_transaction.dart';
 import 'package:mercuri/Settings/icons_map.dart';
@@ -14,8 +15,9 @@ class RecurrentTransactionsPage extends StatelessWidget {
   final String userName;
   final List<dynamic> incomeCategories;
   final List<dynamic> expenseCategories;
-  RecurrentTransactionsPage(
-      this.uid, this.userName, this.incomeCategories, this.expenseCategories,
+  final List paymentTypes;
+  RecurrentTransactionsPage(this.uid, this.userName, this.incomeCategories,
+      this.expenseCategories, this.paymentTypes,
       {super.key});
 
   final formatCurrency = NumberFormat.simpleCurrency();
@@ -55,8 +57,12 @@ class RecurrentTransactionsPage extends StatelessWidget {
           IconButton(
               onPressed: () =>
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return AddRecurrentTransaction(
-                        incomeCategories, expenseCategories);
+                    return StreamProvider<List<SharedAccounts>?>.value(
+                      value: DatabaseService().sharedAcctsList(uid),
+                      initialData: const [],
+                      child: AddRecurrentTransaction(
+                          incomeCategories, expenseCategories),
+                    );
                   })),
               icon: Icon(Icons.add,
                   color: theme.isDarkMode ? Colors.white : Colors.black,
@@ -70,8 +76,7 @@ class RecurrentTransactionsPage extends StatelessWidget {
                 (x) => x['Code'] == recurrentTransactions[i].category!['Icon']);
             var itemIcon = IconsMap().iconsMap[iconIndex]['Icon'];
             return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: TextButton(
                 onPressed: () {
                   showModalBottomSheet(
@@ -82,8 +87,8 @@ class RecurrentTransactionsPage extends StatelessWidget {
                       isScrollControlled: true,
                       context: context,
                       builder: (context) {
-                        return PayRecurrentTransaction(
-                            uid, recurrentTransactions[i]);
+                        return PayRecurrentTransaction(uid, userName,
+                            recurrentTransactions[i], paymentTypes);
                       });
                 },
                 child: Row(
@@ -99,7 +104,7 @@ class RecurrentTransactionsPage extends StatelessWidget {
                           //Icon
                           Icon(
                             itemIcon,
-                            size: 26,
+                            size: 30,
                             color:
                                 theme.isDarkMode ? Colors.white : Colors.black,
                           ),
@@ -133,6 +138,33 @@ class RecurrentTransactionsPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                              (recurrentTransactions[i].associatedSharedAcct !=
+                                          null &&
+                                      recurrentTransactions[i]
+                                          .associatedSharedAcct!
+                                          .isNotEmpty)
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.people_outline_outlined,
+                                          size: 14,
+                                          color: Colors.grey,
+                                        ),
+                                        Text(
+                                          recurrentTransactions[i]
+                                              .associatedSharedAcct!['Name'],
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12),
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox(),
                               //Amount
                               Text(
                                 formatCurrency.format(
