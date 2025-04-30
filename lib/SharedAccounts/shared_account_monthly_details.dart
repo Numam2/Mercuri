@@ -5,7 +5,7 @@ import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/Models/shared_accounts.dart';
 import 'package:mercuri/Settings/theme.dart';
 import 'package:mercuri/SharedAccounts/account_details_list.dart';
-import 'package:mercuri/SharedAccounts/sharedAccountTransactions.dart';
+import 'package:mercuri/SharedAccounts/shared_account_transactions.dart';
 import 'package:provider/provider.dart';
 
 class SharedAccountMonthlyDetails extends StatefulWidget {

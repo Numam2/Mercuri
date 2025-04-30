@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class CreateCategoryDialog extends StatefulWidget {
   final String type;
-  final addToList;
+  final dynamic addToList;
   const CreateCategoryDialog(this.type, this.addToList, {super.key});
 
   @override

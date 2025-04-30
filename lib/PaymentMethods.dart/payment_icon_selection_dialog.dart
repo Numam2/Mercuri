@@ -5,7 +5,7 @@ import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class PaymentIconSelectionDialog extends StatefulWidget {
-  final selectIcon;
+  final dynamic selectIcon;
   const PaymentIconSelectionDialog(this.selectIcon, {super.key});
 
   @override

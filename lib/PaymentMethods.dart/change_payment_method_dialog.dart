@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class ChangePaymentMethodDialog extends StatelessWidget {
   final List paymentMethods;
-  final changePaymentMethod;
+  final dynamic changePaymentMethod;
   const ChangePaymentMethodDialog(this.paymentMethods, this.changePaymentMethod,
       {super.key});
 

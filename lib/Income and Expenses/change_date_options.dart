@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChangeDateOptions extends StatefulWidget {
-  final changeDate;
+  final dynamic changeDate;
   final DateTime selectedDate;
   const ChangeDateOptions(this.changeDate, this.selectedDate, {super.key});
 

@@ -5,7 +5,7 @@ import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class SetAmortizedPaymentDialog extends StatefulWidget {
-  final setAmortizedPayment;
+  final dynamic setAmortizedPayment;
   const SetAmortizedPaymentDialog(this.setAmortizedPayment, {super.key});
 
   @override

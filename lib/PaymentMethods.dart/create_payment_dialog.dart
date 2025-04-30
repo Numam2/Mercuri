@@ -4,7 +4,7 @@ import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class CreatePaymentDialog extends StatefulWidget {
-  final addToList;
+  final dynamic addToList;
   const CreatePaymentDialog(this.addToList, {super.key});
 
   @override

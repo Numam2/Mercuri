@@ -18,7 +18,6 @@ import 'package:mercuri/SharedAccounts/shared_accounts_page.dart';
 import 'package:mercuri/Wrapper.dart';
 import 'package:mercuri/loading.dart';
 import 'package:mercuri/Settings/settings.dart';
-import 'package:mercuri/In%20App%20Purchases/subscription_home.dart';
 import 'package:mercuri/Income%20and%20Expenses/summary.dart';
 import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
@@ -96,11 +95,12 @@ class Home extends StatelessWidget {
 
     if (userData == null) {
       return const Scaffold(body: Loading());
-    } else if (!userData.subscribed! &&
-        !userData.freeTrial! &&
-        userData.trialTo!.isBefore(DateTime.now())) {
-      return const SubscriptionHome();
     }
+    // else if (!userData.subscribed! &&
+    //     !userData.freeTrial! &&
+    //     userData.trialTo!.isBefore(DateTime.now())) {
+    //   return const SubscriptionHome();
+    // }
 
     return Scaffold(
         key: _scaffoldKey,

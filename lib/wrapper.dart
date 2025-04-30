@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mercuri/Autentication/authenticate.dart';
 import 'package:mercuri/Backend/database_service.dart';
+import 'package:mercuri/In%20App%20Purchases/subscription_home.dart';
 import 'package:mercuri/Models/user.dart';
 import 'package:mercuri/home.dart';
 import 'package:mercuri/loading.dart';
@@ -58,7 +59,7 @@ class _WrapperState extends State<Wrapper> {
             value: DatabaseService().userData(currentUser.uid),
             initialData: null,
           ),
-        ], child: Home(currentUser.uid));
+        ], child: Home(currentUser.uid)); // SubscriptionHome(currentUser.uid));
 
         // if (currentUser.displayName == null || currentUser.displayName == '') {
         //   return StreamProvider<UserData?>.value(
