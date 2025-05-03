@@ -7,10 +7,6 @@ class AppUser {
 class UserData {
   final String? uid;
   final String? name;
-  final bool? freeTrial;
-  final DateTime? trialFrom;
-  final DateTime? trialTo;
-  final bool? subscribed;
   final String? email;
   final List<dynamic>? expenseCategories;
   final List<dynamic>? incomeCategories;
@@ -20,15 +16,12 @@ class UserData {
   final List? searchName;
   final List? searchEmail;
   final List? sharedAccounts;
+  final bool? freeUser;
 
   UserData(
       {this.uid,
       this.name,
-      this.freeTrial,
-      this.trialFrom,
-      this.trialTo,
       this.email,
-      this.subscribed,
       this.expenseCategories,
       this.incomeCategories,
       this.invitedSharedAccount,
@@ -36,7 +29,8 @@ class UserData {
       this.budgetCategories,
       this.searchName,
       this.searchEmail,
-      this.sharedAccounts});
+      this.sharedAccounts,
+      this.freeUser});
 }
 
 class UserCreditTransactions {

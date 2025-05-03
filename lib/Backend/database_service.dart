@@ -74,18 +74,9 @@ class DatabaseService {
         searchEmail: snapshot.data().toString().contains('Search email')
             ? snapshot['Search email']
             : [],
-        subscribed: snapshot.data().toString().contains('Subscribed')
-            ? snapshot['Subscribed']
+        freeUser: snapshot.data().toString().contains('Free User')
+            ? snapshot['Free User']
             : false,
-        freeTrial: snapshot.data().toString().contains('Free Trial')
-            ? snapshot['Free Trial']
-            : false,
-        trialFrom: snapshot.data().toString().contains('Date')
-            ? snapshot['Trial Beginning'].toDate()
-            : DateTime(1999, 1, 1),
-        trialTo: snapshot.data().toString().contains('Date')
-            ? snapshot['Trial End'].toDate()
-            : DateTime.now(),
         expenseCategories:
             snapshot.data().toString().contains('Expense Categories')
                 ? snapshot['Expense Categories']
@@ -136,18 +127,9 @@ class DatabaseService {
           searchEmail: doc.data().toString().contains('Search email')
               ? doc['Search email']
               : [],
-          subscribed: doc.data().toString().contains('Subscribed')
-              ? doc['Subscribed']
+          freeUser: doc.data().toString().contains('Free User')
+              ? doc['Free User']
               : false,
-          freeTrial: doc.data().toString().contains('Free Trial')
-              ? doc['Free Trial']
-              : false,
-          trialFrom: doc.data().toString().contains('Date')
-              ? doc['Trial Beginning'].toDate()
-              : DateTime(1999, 1, 1),
-          trialTo: doc.data().toString().contains('Date')
-              ? doc['Trial End'].toDate()
-              : DateTime.now(),
           expenseCategories:
               doc.data().toString().contains('Expense Categories')
                   ? doc['Expense Categories']
@@ -502,53 +484,49 @@ class DatabaseService {
 
     //Update STATS for MONTH
 
-    try {
-      final monthStatsdoc = await monthStatsRef.get();
+    final monthStatsdoc = await monthStatsRef.get();
 
-      if (monthStatsdoc.exists) {
-        //MONTHLY Stats
-        if (type == 'Ingreso') {
-          monthStatsRef.update({
-            'Number of transactions': FieldValue.increment(1),
-            'Total Income': FieldValue.increment(amount),
-            'Income by Category.$category': FieldValue.increment(amount),
-            'Income by User.$user': FieldValue.increment(amount),
-          });
-        } else {
-          monthStatsRef.update({
-            'Number of transactions': FieldValue.increment(1),
-            'Total Expenses': FieldValue.increment(amount),
-            'Expenses by Category.$category': FieldValue.increment(amount),
-            'Expenses by User.$user': FieldValue.increment(amount),
-          });
-        }
+    if (monthStatsdoc.exists) {
+      //MONTHLY Stats
+      if (type == 'Ingreso') {
+        monthStatsRef.update({
+          'Number of transactions': FieldValue.increment(1),
+          'Total Income': FieldValue.increment(amount),
+          'Income by Category.$category': FieldValue.increment(amount),
+          'Income by User.$user': FieldValue.increment(amount),
+        });
       } else {
-        if (type == 'Ingreso') {
-          Map<String, dynamic> orderStats = {
-            'Number of transactions': 1,
-            'Total Income': 0,
-            'Income by Category': {},
-            'Income by User': {},
-          };
-          orderStats['Total Income'] = amount;
-          orderStats['Income by Category'] = {category: amount};
-          orderStats['Income by User'] = {user: amount};
-          await monthStatsRef.set(orderStats);
-        } else {
-          Map<String, dynamic> orderStats = {
-            'Number of transactions': 1,
-            'Total Expenses': 0,
-            'Expenses by Category': {},
-            'Expenses by User': {},
-          };
-          orderStats['Total Expenses'] = amount;
-          orderStats['Expenses by Category'] = {category: amount};
-          orderStats['Expenses by User'] = {user: amount};
-          await monthStatsRef.set(orderStats);
-        }
+        monthStatsRef.update({
+          'Number of transactions': FieldValue.increment(1),
+          'Total Expenses': FieldValue.increment(amount),
+          'Expenses by Category.$category': FieldValue.increment(amount),
+          'Expenses by User.$user': FieldValue.increment(amount),
+        });
       }
-    } catch (error) {
-      print('Error updating Monthly Stats: $error');
+    } else {
+      if (type == 'Ingreso') {
+        Map<String, dynamic> orderStats = {
+          'Number of transactions': 1,
+          'Total Income': 0,
+          'Income by Category': {},
+          'Income by User': {},
+        };
+        orderStats['Total Income'] = amount;
+        orderStats['Income by Category'] = {category: amount};
+        orderStats['Income by User'] = {user: amount};
+        await monthStatsRef.set(orderStats);
+      } else {
+        Map<String, dynamic> orderStats = {
+          'Number of transactions': 1,
+          'Total Expenses': 0,
+          'Expenses by Category': {},
+          'Expenses by User': {},
+        };
+        orderStats['Total Expenses'] = amount;
+        orderStats['Expenses by Category'] = {category: amount};
+        orderStats['Expenses by User'] = {user: amount};
+        await monthStatsRef.set(orderStats);
+      }
     }
   }
 
@@ -671,7 +649,9 @@ class DatabaseService {
         .where('Type', isEqualTo: 'Ingreso')
         .where('Date',
             isGreaterThan: DateTime(date.year, date.month, 1, 0, 0, 0))
-        .where('Date', isLessThan: DateTime(date.year, date.month + 1, 0))
+        .where('Date',
+            isLessThan: DateTime(date.month == 12 ? date.year + 1 : date.year,
+                date.month == 12 ? 1 : date.month + 1, 1))
         .orderBy('Date', descending: true)
         .limit(3)
         .snapshots()
@@ -687,7 +667,9 @@ class DatabaseService {
         .where('Type', isEqualTo: 'Gasto')
         .where('Date',
             isGreaterThan: DateTime(date.year, date.month, 1, 0, 0, 0))
-        .where('Date', isLessThan: DateTime(date.year, date.month + 1, 0))
+        .where('Date',
+            isLessThan: DateTime(date.month == 12 ? date.year + 1 : date.year,
+                date.month == 12 ? 1 : date.month + 1, 1))
         .orderBy('Date', descending: true)
         .limit(3)
         .snapshots()
@@ -702,7 +684,9 @@ class DatabaseService {
         .collection(date.year.toString())
         .where('Date',
             isGreaterThan: DateTime(date.year, date.month, 1, 0, 0, 0))
-        .where('Date', isLessThan: DateTime(date.year, date.month + 1, 0))
+        .where('Date',
+            isLessThan: DateTime(date.month == 12 ? date.year + 1 : date.year,
+                date.month == 12 ? 1 : date.month + 1, 1))
         .orderBy('Date', descending: true)
         .snapshots()
         .map(_transactionsListFromSnapshot);
@@ -736,48 +720,45 @@ class DatabaseService {
         .doc(date.month.toString());
 
     //Update STATS for MONTH
-    try {
-      final monthStatsdoc = await monthStatsRef.get();
 
-      if (monthStatsdoc.exists) {
-        //MONTHLY Stats
-        if (type == 'Income') {
-          monthStatsRef.update({
-            'Total Income': FieldValue.increment(amount),
-            'Income by Category.$category': FieldValue.increment(amount),
-          });
-        } else {
-          monthStatsRef.update({
-            'Total Expenses': FieldValue.increment(amount),
-            'Expenses by Category.$category': FieldValue.increment(amount),
-            'Expenses by Payment Method.${paymentMethod['Name']}':
-                FieldValue.increment(amount),
-          });
-        }
+    final monthStatsdoc = await monthStatsRef.get();
+
+    if (monthStatsdoc.exists) {
+      //MONTHLY Stats
+      if (type == 'Income') {
+        monthStatsRef.update({
+          'Total Income': FieldValue.increment(amount),
+          'Income by Category.$category': FieldValue.increment(amount),
+        });
       } else {
-        if (type == 'Income') {
-          Map<String, dynamic> orderStats = {
-            'Total Income': 0,
-            'Income by Category': {},
-          };
-          orderStats['Total Income'] = amount;
-          orderStats['Income by Category'] = {category: amount};
-          await monthStatsRef.set(orderStats);
-        } else {
-          Map<String, dynamic> orderStats = {
-            'Total Expenses': 0,
-            'Expenses by Category': {},
-          };
-          orderStats['Total Expenses'] = amount;
-          orderStats['Expenses by Category'] = {category: amount};
-          orderStats['Expenses by Payment Method'] = {
-            paymentMethod['Name']: amount
-          };
-          await monthStatsRef.set(orderStats);
-        }
+        monthStatsRef.update({
+          'Total Expenses': FieldValue.increment(amount),
+          'Expenses by Category.$category': FieldValue.increment(amount),
+          'Expenses by Payment Method.${paymentMethod['Name']}':
+              FieldValue.increment(amount),
+        });
       }
-    } catch (error) {
-      print('Error updating Monthly Stats: $error');
+    } else {
+      if (type == 'Income') {
+        Map<String, dynamic> orderStats = {
+          'Total Income': 0,
+          'Income by Category': {},
+        };
+        orderStats['Total Income'] = amount;
+        orderStats['Income by Category'] = {category: amount};
+        await monthStatsRef.set(orderStats);
+      } else {
+        Map<String, dynamic> orderStats = {
+          'Total Expenses': 0,
+          'Expenses by Category': {},
+        };
+        orderStats['Total Expenses'] = amount;
+        orderStats['Expenses by Category'] = {category: amount};
+        orderStats['Expenses by Payment Method'] = {
+          paymentMethod['Name']: amount
+        };
+        await monthStatsRef.set(orderStats);
+      }
     }
   }
 

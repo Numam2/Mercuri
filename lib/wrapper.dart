@@ -4,7 +4,6 @@ import 'package:mercuri/Autentication/authenticate.dart';
 import 'package:mercuri/Backend/database_service.dart';
 import 'package:mercuri/In%20App%20Purchases/subscription_home.dart';
 import 'package:mercuri/Models/user.dart';
-import 'package:mercuri/home.dart';
 import 'package:mercuri/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -54,26 +53,15 @@ class _WrapperState extends State<Wrapper> {
           return const Authenticate(); // User is not logged in
         }
 
-        return MultiProvider(providers: [
-          StreamProvider<UserData?>.value(
-            value: DatabaseService().userData(currentUser.uid),
-            initialData: null,
-          ),
-        ], child: Home(currentUser.uid)); // SubscriptionHome(currentUser.uid));
-
-        // if (currentUser.displayName == null || currentUser.displayName == '') {
-        //   return StreamProvider<UserData?>.value(
-        //     initialData: null,
-        //     value: DatabaseService().userData(currentUser.uid),
-        //     child: const SubscriptionHome(),
-        //   );
-        // } else {
-        //   return StreamProvider<UserData?>.value(
-        //     initialData: null,
-        //     value: DatabaseService().userData(currentUser.uid),
-        //     child: Home(currentUser.uid),
-        //   );
-        // }
+        return MultiProvider(
+            providers: [
+              StreamProvider<UserData?>.value(
+                value: DatabaseService().userData(currentUser.uid),
+                initialData: null,
+              ),
+            ],
+            child:
+                SubscriptionHome(currentUser.uid)); //Home(currentUser.uid)); //
       },
     );
   }

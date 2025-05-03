@@ -27,24 +27,26 @@ class AuthService {
   }
 
   //Sign in with email and password
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future<String?> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        return 'No se encontró un usuario con ese email';
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        return 'Contraseña incorrecta';
       }
+      return 'Ocurrió un error ($e)';
     } catch (e) {
-      print(e.toString());
-      return null;
+      return 'Ocurrió un error inesperado. Intentalo de nuevo';
     }
   }
 
   //Register with email and password
-  Future registerWithEmailAndPassword(
+  Future<String?> registerWithEmailAndPassword(
       String email, String password, String name) async {
     //Search Name
     List<String> caseNameSearchList = [];
@@ -69,35 +71,32 @@ class AuthService {
         await DatabaseService().createUser(value.user!.uid, name, email,
             caseNameSearchList, caseemailSearchList);
       });
+      return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('La contraseña es muy débil');
+        return 'La contraseña es muy débil';
       } else if (e.code == 'email-already-in-use') {
-        print('El email ya existe para un usuario');
+        return 'El email ya existe para un usuario';
       }
+      return 'Ocurrió un error ($e)';
     } catch (e) {
-      print(e.toString());
-      return null;
+      return 'Ocurrió un error inesperado. Intentalo de nuevo';
     }
   }
 
   //Update User Profile Data
-  Future updateUserData(String displayName) async {
+  Future<String?> updateUserData(String displayName) async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       user?.updateDisplayName(displayName);
+      return null;
     } catch (e) {
-      print(e);
+      return 'Ocurrió un error inesperado. Intentalo de nuevo';
     }
   }
 
   //Sing Out
   Future signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+    return await _auth.signOut();
   }
 }
