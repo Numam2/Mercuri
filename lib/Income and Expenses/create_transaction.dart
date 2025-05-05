@@ -71,7 +71,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
       showDialog(
           context: context,
           builder: (context) {
-            return SetAmortizedPaymentDialog(setAmortizedPayment);
+            return SetAmortizedPaymentDialog(setAmortizedPayment, amount);
           });
     } else {
       setState(() {
@@ -170,6 +170,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                   ? const SizedBox()
                   : IconButton(
                       onPressed: () {
+                        //
                         showDialog(
                             context: context,
                             builder: (context) {

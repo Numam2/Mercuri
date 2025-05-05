@@ -3,7 +3,8 @@ import 'package:mercuri/Settings/theme.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  final String uid;
+  const Settings(this.uid, {super.key});
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -117,7 +118,15 @@ class _SettingsState extends State<Settings> {
                   ],
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 40),
+            //UID
+            Text(
+              'UID: ${widget.uid}',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: theme.isDarkMode ? Colors.white : Colors.black),
+            ),
           ],
         ),
       ),

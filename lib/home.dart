@@ -375,7 +375,7 @@ class Home extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return const Settings();
+                      return Settings(userData.uid!);
                     }));
                   },
                   child: Padding(

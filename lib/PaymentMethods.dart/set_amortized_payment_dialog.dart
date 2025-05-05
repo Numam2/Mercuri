@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 class SetAmortizedPaymentDialog extends StatefulWidget {
   final dynamic setAmortizedPayment;
-  const SetAmortizedPaymentDialog(this.setAmortizedPayment, {super.key});
+  final num initialAmount;
+  const SetAmortizedPaymentDialog(this.setAmortizedPayment, this.initialAmount,
+      {super.key});
 
   @override
   State<SetAmortizedPaymentDialog> createState() =>
@@ -15,13 +17,20 @@ class SetAmortizedPaymentDialog extends StatefulWidget {
 
 class _SetAmortizedPaymentDialogState extends State<SetAmortizedPaymentDialog> {
   final formatCurrency = NumberFormat.simpleCurrency();
-  int? numberOfPayments = 0;
+  int? numberOfPayments = 1;
   num? monthlyPayment = 0;
   num? totalPayment = 0;
   TextEditingController totalPaymentController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+  TextEditingController monthsController = TextEditingController();
 
   @override
   void initState() {
+    amountController.text = widget.initialAmount.toString();
+    monthsController.text = '1';
+    monthlyPayment = widget.initialAmount;
+    totalPayment = widget.initialAmount;
+    totalPaymentController.text = '$totalPayment';
     super.initState();
   }
 
@@ -57,9 +66,46 @@ class _SetAmortizedPaymentDialogState extends State<SetAmortizedPaymentDialog> {
                 width: double.infinity,
                 child: Row(
                   children: [
+                    //Monthly amount
+                    Expanded(
+                      child: TextFormField(
+                        controller: amountController,
+                        autofocus: false,
+                        style: TextStyle(
+                            color:
+                                theme.isDarkMode ? Colors.white : Colors.black,
+                            fontSize: 16),
+                        textAlign: TextAlign.left,
+                        cursorColor: Colors.grey,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                          label: const Text('Monto por cuota'),
+                          focusColor: Colors.black,
+                          errorStyle: TextStyle(
+                              color: Colors.redAccent[700], fontSize: 12),
+                          border: const UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.green, width: 1)),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            monthlyPayment = double.parse(value);
+                            totalPayment =
+                                (numberOfPayments! * monthlyPayment!);
+                            amountController.text = value;
+                            totalPaymentController.text = '$totalPayment';
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     //Number of payments
                     Expanded(
                       child: TextFormField(
+                        controller: monthsController,
                         autofocus: false,
                         style: TextStyle(
                             color:
@@ -86,40 +132,7 @@ class _SetAmortizedPaymentDialogState extends State<SetAmortizedPaymentDialog> {
                             numberOfPayments = int.parse(value);
                             totalPayment =
                                 (numberOfPayments! * monthlyPayment!);
-                            totalPaymentController.text = '$totalPayment';
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    //Monthly amount
-                    Expanded(
-                      child: TextFormField(
-                        autofocus: false,
-                        style: TextStyle(
-                            color:
-                                theme.isDarkMode ? Colors.white : Colors.black,
-                            fontSize: 16),
-                        textAlign: TextAlign.left,
-                        cursorColor: Colors.grey,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                          label: const Text('Monto por cuota'),
-                          focusColor: Colors.black,
-                          errorStyle: TextStyle(
-                              color: Colors.redAccent[700], fontSize: 12),
-                          border: const UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.green, width: 1)),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            monthlyPayment = double.parse(value);
-                            totalPayment =
-                                (numberOfPayments! * monthlyPayment!);
+                            monthsController.text = value;
                             totalPaymentController.text = '$totalPayment';
                           });
                         },
