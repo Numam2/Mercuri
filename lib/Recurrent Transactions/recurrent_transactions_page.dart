@@ -31,7 +31,7 @@ class RecurrentTransactionsPage extends StatelessWidget {
     if (recurrentTransactions == null || recurrentTransactions.isEmpty) {
       const Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-        child: Text('No hay transacciones para mostrar'),
+        child: Center(child: Text('No hay transacciones para mostrar')),
       );
     }
     return Scaffold(

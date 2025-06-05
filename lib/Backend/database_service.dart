@@ -942,7 +942,9 @@ class DatabaseService {
       'Category': category,
       'Shared Account': associatedSharedAcct,
       'Last Paid': null,
-      'Next Payment': DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
+      'Next Payment': (fromCreditPayment)
+          ? DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
+          : DateTime.now()
     });
   }
 
@@ -1029,7 +1031,9 @@ class DatabaseService {
               ? doc['Shared Account']
               : {},
           lastPaid: doc.data().toString().contains('Last Paid')
-              ? doc['Last Paid'].toDate()
+              ? (doc['Last Paid'] != null)
+                  ? doc['Last Paid'].toDate()
+                  : DateTime(1999, 1, 1)
               : DateTime(1999, 1, 1),
           nextPayment: doc.data().toString().contains('Next Payment')
               ? doc['Next Payment'].toDate()
