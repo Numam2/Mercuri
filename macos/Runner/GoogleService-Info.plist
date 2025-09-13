@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBBWcAbVFg8ODlHA9PyzajVgem7sVI3gAc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>878461692365</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.mercuri.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>mercuri-pocketfinance</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mercuri-pocketfinance.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:878461692365:ios:60534f74e9a24324ccfc84</string>
+</dict>
+</plist>
