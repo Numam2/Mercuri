@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "878461692365",
+    "project_id": "mercuri-pocketfinance",
+    "storage_bucket": "mercuri-pocketfinance.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878461692365:android:d66886ff75a3805accfc84",
+        "android_client_info": {
+          "package_name": "com.example.mercuri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878461692365-igfudch444f3al76nuip06emvv7ouq69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6YdsmXp2zafVkNmKVJXnBl8tuMjzFyU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878461692365-igfudch444f3al76nuip06emvv7ouq69.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "878461692365-95sc4k7f1jnblt9rm49ir74v9hh1l9p3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mercuri.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
