@@ -311,8 +311,7 @@ class _PayRecurrentTransactionState extends State<PayRecurrentTransaction> {
                               widget.recurrentTransaction.transactionType!,
                               widget.recurrentTransaction.category!['Category'],
                               amount,
-                              selectedPaymentMethod))
-                          .then((value) => Navigator.of(context).pop());
+                              selectedPaymentMethod));
 
                       Navigator.of(context).pop();
                     },
